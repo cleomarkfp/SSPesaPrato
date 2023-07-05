@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, uDMCupomFiscal, StdCtrls, Mask, ToolEdit, CurrEdit,
   NxCollection, ExtCtrls, AdvPanel, SqlExpr, ACBrBase, ACBrBAL, ACBrDeviceSerial,
-  jpeg;
+  jpeg, JvLabel, JvBlinkingLabel;
 
 type
   TfrmPesarPrato = class(TForm)
@@ -17,7 +17,6 @@ type
     Label4: TLabel;
     lblNomeProduto: TLabel;
     Panel1: TNxPanel;
-    Label3: TLabel;
     cePeso: TCurrencyEdit;
     ceIDProduto: TCurrencyEdit;
     Label5: TLabel;
@@ -26,6 +25,8 @@ type
     cePrecoKg: TCurrencyEdit;
     ACBrBAL1: TACBrBAL;
     Image2: TImage;
+    Label7: TLabel;
+    Label3: TJvBlinkingLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure cePesoKeyDown(Sender: TObject; var Key: Word;
@@ -36,7 +37,7 @@ type
     { Private declarations }
     fDmCupomFiscal: TDmCupomFiscal;
     vIdCupom: Integer;
-
+    vPesoAnt: Real;
     procedure prc_Produto_Padrao;
     function fnc_Gravar_Comanda: Integer;
     procedure prc_Inserir_Itens;
@@ -57,8 +58,7 @@ var
 
 implementation
 
-uses DB, uUtilPadrao, DmdDatabase, uCalculo_CupomFiscal, rsDBUtils,
-  uComandaR;
+uses DB, uUtilPadrao, DmdDatabase, uCalculo_CupomFiscal, rsDBUtils, uComandaR;
 
 {$R *.dfm}
 
@@ -77,6 +77,7 @@ end;
 
 procedure TfrmPesarPrato.FormShow(Sender: TObject);
 begin
+  vPesoAnt := 0;
   fDmCupomFiscal := TDmCupomFiscal.Create(Self);
   oDBUtils.SetDataSourceProperties(Self, fDmCupomFiscal);
   prc_Produto_Padrao;
@@ -88,13 +89,22 @@ begin
   fDmCupomFiscal.prc_Abrir_Produto('ID',ceIDProduto.Text);
   cePrecoLivre.Value := fDmCupomFiscal.cdsProdutoPRECO_LIVRE.Value;
   cePrecoKg.Value    := fDmCupomFiscal.cdsProdutoPRECO_VENDA.Value;
+
+  WindowState := wsMaximized;;
 end;
 
 procedure TfrmPesarPrato.cePesoKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if (Key = Vk_Return) and (cePeso.Value > 0) then
-    vIdCupom := fnc_Gravar_Comanda;
+  begin
+    Timer1.Enabled := True;
+    try
+      vIdCupom := fnc_Gravar_Comanda;
+    finally
+      Timer1.Enabled := False;
+    end;
+  end;
 end;
 
 function TfrmPesarPrato.fnc_Gravar_Comanda: Integer;
@@ -277,7 +287,10 @@ end;
 
 procedure TfrmPesarPrato.Timer1Timer(Sender: TObject);
 begin
-  prc_Pesar;
+  try
+    prc_Pesar;
+  except
+  end;
 end;
 
 procedure TfrmPesarPrato.prc_Pesar;
@@ -310,15 +323,29 @@ var
 begin
   if StrToFloat(FormatFloat('0.000',Peso)) > 0.006 then
   begin
-    Timer1.Enabled := False;
     cePeso.Value   := Peso;
+    if peso = vPesoAnt then
+    begin
+      LABEL3.Font.Color := clRed;
+      Label3.Blinking   := True;
+      Label3.Caption    := #13 + 'RETIRE O PRATO DA BALANÇA!';
+      Exit;
+    end;
+    Timer1.Enabled := False;
+    vPesoAnt       := Peso;
     vTecla         := vk_Return;
     cePesoKeyDown(cePeso,vTecla,[ssShift]);
     prc_ImprimirComanda(vIdCupom);
-    Timer1.Enabled := True;
+    Label3.Caption    := #13 + 'COLOQUE O PRATO NA BALANÇA!';
+    LABEL3.Font.Color := clBlue;
+    Label3.Blinking   := False;
+    Timer1.Enabled    := True;
   end
   else
   begin
+    Label3.Caption    := #13 + 'COLOQUE O PRATO NA BALANÇA!';
+    LABEL3.Font.Color := clBlue;
+    Label3.Blinking   := False;
     valid := Trunc(ACBrBAL1.UltimoPesoLido);
     {case valid of
       0:

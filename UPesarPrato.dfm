@@ -1,8 +1,8 @@
 object frmPesarPrato: TfrmPesarPrato
-  Left = 251
+  Left = 293
   Top = 106
-  Width = 979
-  Height = 563
+  Width = 1024
+  Height = 666
   Caption = 'frmPesarPrato'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -12,6 +12,7 @@ object frmPesarPrato: TfrmPesarPrato
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
   OnClose = FormClose
   OnShow = FormShow
   PixelsPerInch = 96
@@ -19,8 +20,8 @@ object frmPesarPrato: TfrmPesarPrato
   object pnlPrincipal: TAdvPanel
     Left = 0
     Top = 0
-    Width = 963
-    Height = 524
+    Width = 1008
+    Height = 627
     Align = alClient
     BevelWidth = 10
     Color = 15325901
@@ -48,12 +49,12 @@ object frmPesarPrato: TfrmPesarPrato
     StatusBar.Font.Name = 'Tahoma'
     StatusBar.Font.Style = []
     DesignSize = (
-      963
-      524)
+      1008
+      627)
     FullHeight = 0
     object Label1: TLabel
-      Left = 287
-      Top = 195
+      Left = 351
+      Top = 275
       Width = 84
       Height = 32
       Alignment = taRightJustify
@@ -68,7 +69,7 @@ object frmPesarPrato: TfrmPesarPrato
     end
     object Label2: TLabel
       Left = 120
-      Top = 432
+      Top = 544
       Width = 83
       Height = 18
       Alignment = taCenter
@@ -83,7 +84,7 @@ object frmPesarPrato: TfrmPesarPrato
     end
     object lblNumComanda: TLabel
       Left = 208
-      Top = 432
+      Top = 544
       Width = 10
       Height = 18
       Alignment = taCenter
@@ -97,8 +98,8 @@ object frmPesarPrato: TfrmPesarPrato
       Transparent = True
     end
     object Label4: TLabel
-      Left = 80
-      Top = 112
+      Left = 133
+      Top = 520
       Width = 70
       Height = 18
       Alignment = taCenter
@@ -112,8 +113,8 @@ object frmPesarPrato: TfrmPesarPrato
       Transparent = True
     end
     object lblNomeProduto: TLabel
-      Left = 232
-      Top = 112
+      Left = 280
+      Top = 520
       Width = 12
       Height = 18
       Alignment = taCenter
@@ -129,8 +130,8 @@ object frmPesarPrato: TfrmPesarPrato
       Transparent = True
     end
     object Label5: TLabel
-      Left = 190
-      Top = 235
+      Left = 254
+      Top = 315
       Width = 181
       Height = 32
       Alignment = taRightJustify
@@ -144,8 +145,8 @@ object frmPesarPrato: TfrmPesarPrato
       Transparent = True
     end
     object Label6: TLabel
-      Left = 225
-      Top = 275
+      Left = 289
+      Top = 355
       Width = 146
       Height = 32
       Alignment = taRightJustify
@@ -159,8 +160,8 @@ object frmPesarPrato: TfrmPesarPrato
       Transparent = True
     end
     object Image2: TImage
-      Left = 848
-      Top = 392
+      Left = 893
+      Top = 495
       Width = 89
       Height = 115
       Anchors = [akRight, akBottom]
@@ -357,80 +358,59 @@ object frmPesarPrato: TfrmPesarPrato
     object Panel1: TNxPanel
       Left = 10
       Top = 10
-      Width = 943
-      Height = 75
+      Width = 988
+      Height = 158
       Align = alTop
       BorderPen.Style = psClear
       UseDockManager = False
       ParentBackground = False
       TabOrder = 0
-      object Label3: TLabel
-        Left = 136
-        Top = 11
-        Width = 733
-        Height = 48
-        Caption = 'COLOQUE O PRATO NA BALAN'#199'A'
+      DesignSize = (
+        988
+        158)
+      object Label7: TLabel
+        Left = 8
+        Top = 107
+        Width = 974
+        Height = 42
+        Alignment = taCenter
+        Anchors = [akLeft, akTop, akRight]
+        AutoSize = False
+        Caption = 'AGUARDE IMPRESS'#195'O DA COMANDA'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -40
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = True
+      end
+      object Label3: TJvBlinkingLabel
+        Left = 0
+        Top = 0
+        Width = 988
+        Height = 96
+        Align = alTop
+        Alignment = taCenter
+        Caption = #13#10'COLOQUE O PRATO NA BALAN'#199'A'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlue
         Font.Height = -40
         Font.Name = 'Verdana'
         Font.Style = [fsBold]
         ParentFont = False
+        Transparent = True
+        HotTrackFont.Charset = DEFAULT_CHARSET
+        HotTrackFont.Color = clWindowText
+        HotTrackFont.Height = -11
+        HotTrackFont.Name = 'MS Sans Serif'
+        HotTrackFont.Style = []
+        BlinkingDelay = 1000
+        BlinkingTime = 1500
       end
     end
     object cePeso: TCurrencyEdit
-      Left = 376
-      Top = 191
-      Width = 233
-      Height = 36
-      AutoSize = False
-      Ctl3D = False
-      DecimalPlaces = 3
-      DisplayFormat = '0.000'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -27
-      Font.Name = 'Verdana'
-      Font.Style = [fsBold]
-      ParentCtl3D = False
-      ParentFont = False
-      TabOrder = 1
-      OnKeyDown = cePesoKeyDown
-    end
-    object ceIDProduto: TCurrencyEdit
-      Left = 160
-      Top = 112
-      Width = 65
-      Height = 21
-      AutoSize = False
-      Color = 15325901
-      Ctl3D = False
-      DecimalPlaces = 0
-      DisplayFormat = '0'
-      ParentCtl3D = False
-      TabOrder = 2
-    end
-    object cePrecoLivre: TCurrencyEdit
-      Left = 376
-      Top = 231
-      Width = 233
-      Height = 36
-      AutoSize = False
-      Ctl3D = False
-      DecimalPlaces = 3
-      DisplayFormat = '0.000'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -27
-      Font.Name = 'Verdana'
-      Font.Style = [fsBold]
-      ParentCtl3D = False
-      ParentFont = False
-      TabOrder = 3
-      OnKeyDown = cePesoKeyDown
-    end
-    object cePrecoKg: TCurrencyEdit
-      Left = 376
+      Left = 440
       Top = 271
       Width = 233
       Height = 36
@@ -443,6 +423,58 @@ object frmPesarPrato: TfrmPesarPrato
       Font.Height = -27
       Font.Name = 'Verdana'
       Font.Style = [fsBold]
+      Anchors = [akLeft, akTop, akRight]
+      ParentCtl3D = False
+      ParentFont = False
+      TabOrder = 1
+      OnKeyDown = cePesoKeyDown
+    end
+    object ceIDProduto: TCurrencyEdit
+      Left = 208
+      Top = 520
+      Width = 65
+      Height = 21
+      AutoSize = False
+      Color = 15325901
+      Ctl3D = False
+      DecimalPlaces = 0
+      DisplayFormat = '0'
+      ParentCtl3D = False
+      TabOrder = 2
+    end
+    object cePrecoLivre: TCurrencyEdit
+      Left = 440
+      Top = 311
+      Width = 233
+      Height = 36
+      AutoSize = False
+      Ctl3D = False
+      DisplayFormat = '0.00'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -27
+      Font.Name = 'Verdana'
+      Font.Style = [fsBold]
+      Anchors = [akLeft, akTop, akRight]
+      ParentCtl3D = False
+      ParentFont = False
+      TabOrder = 3
+      OnKeyDown = cePesoKeyDown
+    end
+    object cePrecoKg: TCurrencyEdit
+      Left = 440
+      Top = 351
+      Width = 233
+      Height = 36
+      AutoSize = False
+      Ctl3D = False
+      DisplayFormat = '0.00'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -27
+      Font.Name = 'Verdana'
+      Font.Style = [fsBold]
+      Anchors = [akLeft, akTop, akRight]
       ParentCtl3D = False
       ParentFont = False
       TabOrder = 4
