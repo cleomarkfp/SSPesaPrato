@@ -362,6 +362,9 @@ end;
 
 procedure TfrmPesarPrato.prc_ImprimirComanda(ID_Cupom: Integer);
 begin
+  if fDmCupomFiscal.cdsCupomParametrosUSA_COMANDA.AsString = 'N' then
+    Exit;
+    
   fDmCupomFiscal.cdsComandaRel.Close;
   fDmCupomFiscal.sdsComandaRel.CommandText := fDmCupomFiscal.ctComandaRel;
   fDmCupomFiscal.sdsComandaRel.ParamByName('ID').AsInteger := ID_Cupom;
@@ -373,12 +376,22 @@ begin
 
   fComandaR := TfComandaR.Create(Self);
   fComandaR.fDmCupomFiscal := fDmCupomFiscal;
-  fComandaR.RLReport1.PrintDialog := False;
-  if fDmCupomFiscal.cdsCupomParametrosUSA_COMANDA.AsString = 'P' then
-    fComandaR.RLReport1.PreviewModal
-  else
-  if fDmCupomFiscal.cdsCupomParametrosUSA_COMANDA.AsString = 'S' then
-    fComandaR.RLReport1.Print;
+  case fDmCupomFiscal.cdsCupomParametrosLAYOUT_COMANDA.AsInteger of
+    1: begin
+         fComandaR.RLReport1.PrintDialog := False;
+         if fDmCupomFiscal.cdsCupomParametrosUSA_COMANDA.AsString = 'P' then
+           fComandaR.RLReport1.PreviewModal
+         else
+           fComandaR.RLReport1.Print;
+       end;
+    2: begin
+         fComandaR.RLReport2.PrintDialog := False;
+         if fDmCupomFiscal.cdsCupomParametrosUSA_COMANDA.AsString = 'P' then
+           fComandaR.RLReport2.PreviewModal
+         else
+           fComandaR.RLReport2.Print;
+       end;
+  end;
 end;
 
 procedure TfrmPesarPrato.prc_Grava_Cupom;
