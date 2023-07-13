@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, uDMCupomFiscal, StdCtrls, Mask, ToolEdit, CurrEdit,
   NxCollection, ExtCtrls, AdvPanel, SqlExpr, ACBrBase, ACBrBAL, ACBrDeviceSerial,
-  jpeg, JvLabel, JvBlinkingLabel;
+  jpeg, JvLabel, JvBlinkingLabel, ComCtrls;
 
 type
   TfrmPesarPrato = class(TForm)
@@ -24,15 +24,17 @@ type
     Label6: TLabel;
     cePrecoKg: TCurrencyEdit;
     ACBrBAL1: TACBrBAL;
-    Image2: TImage;
-    Label7: TLabel;
     Label3: TJvBlinkingLabel;
+    ProgressBar1: TProgressBar;
+    Timer2: TTimer;
+    Image2: TImage;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure cePesoKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure Timer1Timer(Sender: TObject);
     procedure ACBrBAL1LePeso(Peso: Double; Resposta: String);
+    procedure Timer2Timer(Sender: TObject);
   private
     { Private declarations }
     fDmCupomFiscal: TDmCupomFiscal;
@@ -46,6 +48,7 @@ type
     procedure prc_Pesar;
     procedure prc_ImprimirComanda(ID_Cupom: Integer);
     procedure prc_Grava_Cupom;
+    procedure prc_ConfiguraBalanca;
 
     function fnc_NumComanda: Integer;
 
@@ -81,16 +84,22 @@ begin
   fDmCupomFiscal := TDmCupomFiscal.Create(Self);
   oDBUtils.SetDataSourceProperties(Self, fDmCupomFiscal);
   prc_Produto_Padrao;
-  cePeso.SetFocus;
+//  cePeso.SetFocus;
 
   timer1.Interval := StrToInt(SQLLocate('CUPOMFISCAL_PARAMETROS','ID','BALANCA_TIMER','1'));
-  Timer1.Enabled  := True;
+  timer2.Interval := timer1.Interval div 1000;
 
   fDmCupomFiscal.prc_Abrir_Produto('ID',ceIDProduto.Text);
   cePrecoLivre.Value := fDmCupomFiscal.cdsProdutoPRECO_LIVRE.Value;
   cePrecoKg.Value    := fDmCupomFiscal.cdsProdutoPRECO_VENDA.Value;
+  ProgressBar1.Max   := Timer1.Interval div 100;
 
-  WindowState := wsMaximized;;
+  Timer1.Enabled  := True;
+//  Timer2.Enabled  := True;
+
+  prc_ConfiguraBalanca;
+
+  WindowState := wsMaximized;
 end;
 
 procedure TfrmPesarPrato.cePesoKeyDown(Sender: TObject; var Key: Word;
@@ -133,8 +142,8 @@ begin
     end;
   except
   end;
-  cePeso.Clear;
-  cePeso.SetFocus;
+//  cePeso.Clear;
+//  cePeso.SetFocus;
 end;
 
 function TfrmPesarPrato.fnc_NumComanda: Integer;
@@ -288,6 +297,7 @@ end;
 procedure TfrmPesarPrato.Timer1Timer(Sender: TObject);
 begin
   try
+    ProgressBar1.Position := 0;
     prc_Pesar;
   except
   end;
@@ -298,20 +308,6 @@ var
   strPeso: string;
   TimeOut: Integer;
 begin
-  if acbrBal1.Ativo then
-    ACBrBAL1.Desativar;
-
-     // configura porta de comunicação
-  ACBrBAL1.Modelo := TACBrBALModelo(StrToInt(vModeloBalanca)); //urano us pop
-  ACBrBAL1.Device.HandShake := TACBrHandShake(0);
-  ACBrBAL1.Device.Parity := TACBrSerialParity(0);
-  ACBrBAL1.Device.Stop   := TACBrSerialStop(0);
-  ACBrBAL1.Device.Data   := StrToInt('8');
-  ACBrBAL1.Device.Baud   := StrToINt(vVelBalanca);
-  ACBrBAL1.Device.Porta  := vPortaBalanca;
-
-     // Conecta com a balança
-  ACBrBAL1.Ativar;
   TimeOut := 2000;
   ACBrBAL1.LePeso(TimeOut);
 end;
@@ -323,7 +319,7 @@ var
 begin
   if StrToFloat(FormatFloat('0.000',Peso)) > 0.006 then
   begin
-    cePeso.Value   := Peso;
+    cePeso.Value := Peso;
     if peso = vPesoAnt then
     begin
       LABEL3.Font.Color := clRed;
@@ -331,22 +327,31 @@ begin
       Label3.Caption    := #13 + 'RETIRE O PRATO DA BALANÇA!';
       Exit;
     end;
-    Timer1.Enabled := False;
-    vPesoAnt       := Peso;
-    vTecla         := vk_Return;
+    Timer1.Enabled    := False;
+    Timer2.Enabled    := False;
+    LABEL3.Font.Color := clBlack;
+    Label3.Blinking   := False;
+    Label3.Caption    := #13 + 'AGUARDE IMPRESSÃO DA COMANDA!';
+    ProgressBar1.Position := 0;
+    vPesoAnt          := Peso;
+    vTecla            := vk_Return;
     cePesoKeyDown(cePeso,vTecla,[ssShift]);
     prc_ImprimirComanda(vIdCupom);
-    Label3.Caption    := #13 + 'COLOQUE O PRATO NA BALANÇA!';
-    LABEL3.Font.Color := clBlue;
-    Label3.Blinking   := False;
+    LABEL3.Font.Color := clRed;
+//    Label3.Blinking   := True;
+    Label3.Caption    := #13 + 'RETIRE O PRATO DA BALANÇA!';
+    Sleep(4000);
     Timer1.Enabled    := True;
+//    Timer2.Enabled    := True;
   end
   else
   begin
+    vPesoAnt          := 0;
     Label3.Caption    := #13 + 'COLOQUE O PRATO NA BALANÇA!';
     LABEL3.Font.Color := clBlue;
     Label3.Blinking   := False;
     valid := Trunc(ACBrBAL1.UltimoPesoLido);
+    cePeso.Value := 0;
     {case valid of
       0:
         ShowMessage('TimeOut !' + sLineBreak + 'Coloque o produto sobre a Balança!');
@@ -420,6 +425,29 @@ begin
   fDmCupomFiscal.cdsCupomFiscalID_CLIENTE.AsInteger := fDmCupomFiscal.vClienteID;
   fDmCupomFiscal.cdsCupomFiscal.Post;
   fDmCupomFiscal.cdsCupomFiscal.ApplyUpdates(0);
+end;
+
+procedure TfrmPesarPrato.Timer2Timer(Sender: TObject);
+begin
+  ProgressBar1.Position := ProgressBar1.Position + 1;
+end;
+
+procedure TfrmPesarPrato.prc_ConfiguraBalanca;
+begin
+  if acbrBal1.Ativo then
+    ACBrBAL1.Desativar;
+
+     // configura porta de comunicação
+  ACBrBAL1.Modelo := TACBrBALModelo(StrToInt(vModeloBalanca)); //urano us pop
+  ACBrBAL1.Device.HandShake := TACBrHandShake(0);
+  ACBrBAL1.Device.Parity := TACBrSerialParity(0);
+  ACBrBAL1.Device.Stop   := TACBrSerialStop(0);
+  ACBrBAL1.Device.Data   := StrToInt('8');
+  ACBrBAL1.Device.Baud   := StrToINt(vVelBalanca);
+  ACBrBAL1.Device.Porta  := vPortaBalanca;
+
+     // Conecta com a balança
+  ACBrBAL1.Ativar;
 end;
 
 end.

@@ -12,9 +12,12 @@ object frmPesarPrato: TfrmPesarPrato
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
-  Position = poScreenCenter
+  Position = poDefault
   OnClose = FormClose
   OnShow = FormShow
+  DesignSize = (
+    1008
+    627)
   PixelsPerInch = 96
   TextHeight = 13
   object pnlPrincipal: TAdvPanel
@@ -73,6 +76,7 @@ object frmPesarPrato: TfrmPesarPrato
       Width = 83
       Height = 18
       Alignment = taCenter
+      Anchors = [akLeft, akBottom]
       Caption = 'Comanda:'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -88,6 +92,7 @@ object frmPesarPrato: TfrmPesarPrato
       Width = 10
       Height = 18
       Alignment = taCenter
+      Anchors = [akLeft, akBottom]
       Caption = '0'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -103,6 +108,7 @@ object frmPesarPrato: TfrmPesarPrato
       Width = 70
       Height = 18
       Alignment = taCenter
+      Anchors = [akLeft, akBottom]
       Caption = 'Produto:'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -118,6 +124,7 @@ object frmPesarPrato: TfrmPesarPrato
       Width = 12
       Height = 18
       Alignment = taCenter
+      Anchors = [akLeft, akBottom]
       Caption = '..'
       Color = 14402220
       Font.Charset = DEFAULT_CHARSET
@@ -161,7 +168,7 @@ object frmPesarPrato: TfrmPesarPrato
     end
     object Image2: TImage
       Left = 893
-      Top = 495
+      Top = 471
       Width = 89
       Height = 115
       Anchors = [akRight, akBottom]
@@ -364,27 +371,7 @@ object frmPesarPrato: TfrmPesarPrato
       BorderPen.Style = psClear
       UseDockManager = False
       ParentBackground = False
-      TabOrder = 0
-      DesignSize = (
-        988
-        158)
-      object Label7: TLabel
-        Left = 8
-        Top = 107
-        Width = 974
-        Height = 42
-        Alignment = taCenter
-        Anchors = [akLeft, akTop, akRight]
-        AutoSize = False
-        Caption = 'AGUARDE IMPRESS'#195'O DA COMANDA'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clBlack
-        Font.Height = -40
-        Font.Name = 'Arial'
-        Font.Style = [fsBold]
-        ParentFont = False
-        Transparent = True
-      end
+      TabOrder = 1
       object Label3: TJvBlinkingLabel
         Left = 0
         Top = 0
@@ -392,7 +379,7 @@ object frmPesarPrato: TfrmPesarPrato
         Height = 96
         Align = alTop
         Alignment = taCenter
-        Caption = #13#10'COLOQUE O PRATO NA BALAN'#199'A'
+        Caption = #13#10'COLOQUE O PRATO NA BALAN'#199'A!'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clBlue
         Font.Height = -40
@@ -400,7 +387,6 @@ object frmPesarPrato: TfrmPesarPrato
         Font.Style = [fsBold]
         ParentFont = False
         Transparent = True
-        Visible = False
         HotTrackFont.Charset = DEFAULT_CHARSET
         HotTrackFont.Color = clWindowText
         HotTrackFont.Height = -11
@@ -415,6 +401,7 @@ object frmPesarPrato: TfrmPesarPrato
       Top = 271
       Width = 233
       Height = 36
+      TabStop = False
       AutoSize = False
       Ctl3D = False
       DecimalPlaces = 3
@@ -427,7 +414,7 @@ object frmPesarPrato: TfrmPesarPrato
       Anchors = [akLeft, akTop, akRight]
       ParentCtl3D = False
       ParentFont = False
-      TabOrder = 1
+      TabOrder = 2
       OnKeyDown = cePesoKeyDown
     end
     object ceIDProduto: TCurrencyEdit
@@ -440,14 +427,16 @@ object frmPesarPrato: TfrmPesarPrato
       Ctl3D = False
       DecimalPlaces = 0
       DisplayFormat = '0'
+      Anchors = [akLeft, akBottom]
       ParentCtl3D = False
-      TabOrder = 2
+      TabOrder = 0
     end
     object cePrecoLivre: TCurrencyEdit
       Left = 440
       Top = 311
       Width = 233
       Height = 36
+      TabStop = False
       AutoSize = False
       Ctl3D = False
       DisplayFormat = '0.00'
@@ -467,6 +456,7 @@ object frmPesarPrato: TfrmPesarPrato
       Top = 351
       Width = 233
       Height = 36
+      TabStop = False
       AutoSize = False
       Ctl3D = False
       DisplayFormat = '0.00'
@@ -482,6 +472,15 @@ object frmPesarPrato: TfrmPesarPrato
       OnKeyDown = cePesoKeyDown
     end
   end
+  object ProgressBar1: TProgressBar
+    Left = 440
+    Top = 248
+    Width = 233
+    Height = 17
+    Anchors = [akLeft, akTop, akRight]
+    TabOrder = 1
+    Visible = False
+  end
   object Timer1: TTimer
     Enabled = False
     Interval = 10000
@@ -496,5 +495,12 @@ object frmPesarPrato: TfrmPesarPrato
     OnLePeso = ACBrBAL1LePeso
     Left = 440
     Top = 136
+  end
+  object Timer2: TTimer
+    Enabled = False
+    Interval = 10000
+    OnTimer = Timer2Timer
+    Left = 473
+    Top = 137
   end
 end
