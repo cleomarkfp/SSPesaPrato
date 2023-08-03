@@ -1,6 +1,6 @@
 object frmPesarPrato: TfrmPesarPrato
-  Left = 293
-  Top = 106
+  Left = 87
+  Top = 105
   Width = 1024
   Height = 666
   Caption = 'frmPesarPrato'
@@ -167,8 +167,8 @@ object frmPesarPrato: TfrmPesarPrato
       Transparent = True
     end
     object Image2: TImage
-      Left = 893
-      Top = 471
+      Left = 845
+      Top = 455
       Width = 89
       Height = 115
       Anchors = [akRight, akBottom]
@@ -475,7 +475,7 @@ object frmPesarPrato: TfrmPesarPrato
   object ProgressBar1: TProgressBar
     Left = 440
     Top = 248
-    Width = 233
+    Width = 206
     Height = 17
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 1
