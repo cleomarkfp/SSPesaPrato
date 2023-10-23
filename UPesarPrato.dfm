@@ -387,6 +387,7 @@ object frmPesarPrato: TfrmPesarPrato
         Font.Style = [fsBold]
         ParentFont = False
         Transparent = True
+        Visible = False
         HotTrackFont.Charset = DEFAULT_CHARSET
         HotTrackFont.Color = clWindowText
         HotTrackFont.Height = -11

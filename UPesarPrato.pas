@@ -184,10 +184,13 @@ begin
     fDmCupomFiscal.cdsCupom_ItensITEM.AsInteger       := vItemAux + 1;
     fDmCupomFiscal.cdsCupom_ItensID_PRODUTO.AsInteger := ceIDProduto.AsInteger;
     fDmCupomFiscal.cdsCupom_ItensQTD.AsFloat          := cePeso.Value;
-    fDmCupomFiscal.cdsCupom_ItensVLR_UNITARIO.AsFloat       := fDmCupomFiscal.cdsProdutoPRECO_VENDA.AsFloat;
-    fDmCupomFiscal.cdsCupom_ItensVLR_UNIT_ORIGINAL.AsFloat  := fDmCupomFiscal.cdsProdutoPRECO_VENDA.AsFloat;
+    fDmCupomFiscal.cdsCupom_ItensVLR_UNITARIO.AsFloat      := fDmCupomFiscal.cdsProdutoPRECO_VENDA.AsFloat;
+    fDmCupomFiscal.cdsCupom_ItensVLR_UNIT_ORIGINAL.AsFloat := fDmCupomFiscal.cdsProdutoPRECO_VENDA.AsFloat;
     fDmCupomFiscal.cdsCupom_ItensVLR_DESCONTO.AsFloat := 0;
-    fDmCupomFiscal.cdsCupom_ItensVLR_TOTAL.AsFloat := StrToFloat(FormatFloat('0.00',fDmCupomFiscal.cdsProdutoPRECO_VENDA.AsFloat * cePeso.Value));
+    fDmCupomFiscal.cdsCupom_ItensVLR_TOTAL.AsFloat    := StrToFloat(FormatFloat('0.00',fDmCupomFiscal.cdsProdutoPRECO_VENDA.AsFloat * cePeso.Value));
+    fDmCupomFiscal.cdsCupom_ItensOBSERVACAO.AsString  := FormatFloat('0.000',fDmCupomFiscal.cdsCupom_ItensQTD.AsFloat) + ' Kg x ' +
+                                                         FormatFloat('0.00',fDmCupomFiscal.cdsCupom_ItensVLR_UNITARIO.AsFloat) + ' = R$ ' +
+                                                         FormatFloat('0.00',fDmCupomFiscal.cdsCupom_ItensVLR_TOTAL.AsFloat);
     prc_Preco_Livre;
     prc_Mover_Itens;
 

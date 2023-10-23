@@ -1,7 +1,7 @@
 program SSPesaPrato;
 
 uses
-  Forms,
+  Forms, Windows,
   DmdDatabase in '..\ssfacil\DmdDatabase.pas' {DmDatabase: TDataModule},
   UEscolhe_Filial in '..\ssfacil\UEscolhe_Filial.pas' {frmEscolhe_Filial},
   rsDBUtils in '..\rslib\nova\rsDBUtils.pas',
@@ -22,9 +22,28 @@ uses
   uCalculo_CupomFiscal in '..\SSNFCe\uCalculo_CupomFiscal.pas',
   uDmParametros in '..\SSNFCe\uDmParametros.pas' {dmParametros: TDataModule};
 
+var
+  Handle: THandle;
+
 {$R *.res}
 
 begin
+
+  Handle := CreateMutex(nil,True,'frmPesarPrato');
+  if GetLastError = ERROR_ALREADY_EXISTS then
+  begin
+    Application.MessageBox('Este programa já está aberto!','Atenção!', mb_Ok);
+    if not IsWindowVisible(Handle) then
+    begin
+      ShowWindow(Handle, SW_RESTORE);
+      SetForegroundWindow(Handle);
+    end;
+    if Handle <> 0 then
+      CloseHandle(Handle);
+    Exit;
+  end;
+
+
   Application.Initialize;
   Application.CreateForm(TDmDatabase, DmDatabase);
   Application.CreateForm(TdmParametros, dmParametros);
